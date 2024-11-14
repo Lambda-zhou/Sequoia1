@@ -6,6 +6,13 @@ import talib as tl
 
 import concurrent.futures
 
+# Modified logging configuration to print to console and file
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s %(message)s')
+console.setFormatter(formatter)
+logging.getLogger().addHandler(console)
 
 def fetch(code_name):
     stock = code_name[0]

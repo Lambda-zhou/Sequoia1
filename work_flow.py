@@ -10,6 +10,7 @@ from strategy import parking_apron
 from strategy import low_backtrace_increase
 from strategy import keep_increasing
 from strategy import high_tight_flag
+from strategy import yuan_shen
 import akshare as ak
 import push
 import logging
@@ -41,6 +42,7 @@ def prepare():
         '海龟交易法则': turtle_trade.check_enter,
         '高而窄的旗形': high_tight_flag.check,
         '放量跌停': climax_limitdown.check,
+        '圆神': yuan_shen.check,
     }
 
     if datetime.datetime.now().weekday() == 0:

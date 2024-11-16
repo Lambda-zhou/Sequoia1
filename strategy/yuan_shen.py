@@ -1,34 +1,32 @@
-# -*- encoding: UTF-8 -*-
 import logging
-import pandas as pd
 
-# 新的股票分析策略
-def check(code_name, data):
-    # 确保数据有足够的行数
-    if len(data) < 5:
-        logging.debug("{0}:样本小于5天...\n".format(code_name))
+
+# 低回撤稳步上涨策略
+def check(code_name, data, end_date=None, threshold=60):
+    if end_date is not None:
+        mask = (data['日期'] <= end_date)
+        data = data.loc[mask]
+    data = data.tail(n=threshold)
+
+    if len(data) < threshold:
+        logging.debug("{0}:样本小于{1}天...\n".format(code_name, threshold))
         return False
 
-    # 获取最近几天的数据
-    current = data.iloc[-1]
-    three_days_ago = data.iloc[-4]
-    four_days_ago = data.iloc[-5]
-    previous_day = data.iloc[-2]
+    ratio_increase = (data.iloc[-1]['收盘'] - data.iloc[0]['收盘']) / data.iloc[0]['收盘']
+    if ratio_increase < 0.6:
+        return False  # 允许有一次“洗盘”
 
-    # 当前收盘价与3个交易日前和4个交易日前收盘价的比值
-    ratio = current['收盘'] / three_days_ago['收盘']
-    
-    # 检查条件
-    if ratio >= 1.1 and current['收盘'] == current['最高']:
-        if current['成交量'] > previous_day['成交量'] and current['收盘'] < current['开盘']:
-            if current['收盘'] < previous_day['收盘']:
-                if current['成交量'] <= data.iloc[-3:-1]['成交量'].max():
-                    return True
+    flag = True
+    for i in range(1, len(data)):
+        # 单日跌幅超7%；高开低走7%；两日累计跌幅10%；两日高开低走累计10%
+        if data.iloc[i - 1]['p_change'] < -7 \
+                or (data.iloc[i]['收盘'] - data.iloc[i]['开盘']) / data.iloc[i]['开盘'] * 100 < -7 \
+                or data.iloc[i - 1]['p_change'] + data.iloc[i]['p_change'] < -10 \
+                or (data.iloc[i]['收盘'] - data.iloc[i - 1]['开盘']) / data.iloc[i - 1]['开盘'] * 100 < -10:
+            return False
+            # if flag:
+            #     flag = False
+            # else:
+            #     return False
 
-    return False
-
-# 示例使用
-# 假设我们有一个DataFrame 'df' 包含股票数据
-# df = pd.read_csv('your_stock_data.csv')  # 读取数据
-# result = new_check('股票代码', df)
-# print(result)
+    return True

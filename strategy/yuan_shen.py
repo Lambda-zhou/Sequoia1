@@ -2,7 +2,12 @@ import logging
 import pandas as pd
 
 # 股票监测策略函数
-def check(code_name, data, threshold=4):
+def check(code_name, data, end_date=None, threshold=4):
+    if end_date is not None:
+        mask = (data['日期'] <= end_date)
+        data = data.loc[mask]
+    data = data.tail(n=threshold)
+
     # 确保数据行数足够
     if len(data) < threshold + 1:
         logging.debug("{0}: 数据样本小于{1}天...\n".format(code_name, threshold + 1))

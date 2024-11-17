@@ -17,6 +17,7 @@ import logging
 import time
 import datetime
 
+
 def prepare():
     logging.info("************************ process start ***************************************")
     all_data = ak.stock_zh_a_spot_em()

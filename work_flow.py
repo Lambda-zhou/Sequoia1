@@ -17,14 +17,6 @@ import logging
 import time
 import datetime
 
-# # Modified logging configuration to print to console and file
-# logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
-# console = logging.StreamHandler()
-# console.setLevel(logging.INFO)
-# formatter = logging.Formatter('%(asctime)s %(message)s')
-# console.setFormatter(formatter)
-# logging.getLogger().addHandler(console)
-
 def prepare():
     logging.info("************************ process start ***************************************")
     all_data = ak.stock_zh_a_spot_em()

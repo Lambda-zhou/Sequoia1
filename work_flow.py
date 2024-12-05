@@ -35,7 +35,7 @@ def prepare():
         '海龟交易法则': turtle_trade.check_enter,
         '高而窄的旗形': high_tight_flag.check,
         '放量跌停': climax_limitdown.check,
-        '圆神': yuan_shen.check,
+        # '圆神': yuan_shen.check,
     }
 
     if datetime.datetime.now().weekday() == 0:

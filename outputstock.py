@@ -87,7 +87,7 @@ def printpool(stock_number):
 		print(f"名: {stock_name}, 价格: {stock_price}, 次数: {int(info['count']/2)}, 池: {pools}")
 
 
-def main:
+def main():
 	log()
 	settings.init()
 	work_flow.prepare()

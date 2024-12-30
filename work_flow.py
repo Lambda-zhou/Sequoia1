@@ -50,7 +50,7 @@ def process(stocks, strategies):
     stocks_data = data_fetcher.run(stocks)
     for strategy, strategy_func in strategies.items():
         check(stocks_data, strategy, strategy_func)
-        time.sleep(2)
+        time.sleep(1)
 
 def check(stocks_data, strategy, strategy_func):
     end = settings.config['end_date']

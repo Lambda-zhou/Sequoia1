@@ -10,6 +10,7 @@ from strategy import parking_apron
 from strategy import low_backtrace_increase
 from strategy import keep_increasing
 from strategy import high_tight_flag
+from strategy import yuan_shen
 import akshare as ak
 import push
 import logging

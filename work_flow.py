@@ -10,7 +10,6 @@ from strategy import parking_apron
 from strategy import low_backtrace_increase
 from strategy import keep_increasing
 from strategy import high_tight_flag
-from strategy import yuan_shen
 import akshare as ak
 import push
 import logging
@@ -21,7 +20,7 @@ import datetime
 def prepare():
     logging.info("************************ process start ***************************************")
     all_data = ak.stock_zh_a_spot_em()
-    subset = all_data[['代码', '名称','最新价', '成交量']]
+    subset = all_data[['代码', '名称','最新价','成交量']]
     stocks = [tuple(x) for x in subset.values]
     statistics(all_data, stocks)
 
@@ -41,35 +40,36 @@ def prepare():
     if datetime.datetime.now().weekday() == 0:
         strategies['均线多头'] = keep_increasing.check
 
-    process(stocks, strategies, datetime.datetime.now().strftime('%Y-%m-%d'))
+    process(stocks, strategies)
 
 
     logging.info("************************ process   end ***************************************")
 
-def process(stocks, strategies, end_date):
+def process(stocks, strategies):
     stocks_data = data_fetcher.run(stocks)
     for strategy, strategy_func in strategies.items():
-        check(stocks_data, strategy, strategy_func, end_date)
-        time.sleep(0.5)
+        check(stocks_data, strategy, strategy_func)
+        time.sleep(1)
 
-    
-def check(stocks_data, strategy, strategy_func, end_date):
-    m_filter = check_enter(end_date=end_date, strategy_fun=strategy_func)
+def check(stocks_data, strategy, strategy_func):
+    end = settings.config['end_date']
+    m_filter = check_enter(end_date=end, strategy_fun=strategy_func)
     results = dict(filter(m_filter, stocks_data.items()))
     if len(results) > 0:
         push.strategy('**************"{0}"**************\n{1}\n**************"{0}"**************\n'.format(strategy, list(results.keys())))
 
+
 def check_enter(end_date=None, strategy_fun=enter.check_volume):
     def end_date_filter(stock_data):
         if end_date is not None:
-            # 将end_date字符串转换为datetime.date对象
-            end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
-            if end_date_obj < stock_data[1].iloc[0].日期:  # 该股票在end_date时还未上市
+            if end_date < stock_data[1].iloc[0].日期:  # 该股票在end_date时还未上市
                 logging.debug("{}在{}时还未上市".format(stock_data[0], end_date))
                 return False
         return strategy_fun(stock_data[0], stock_data[1], end_date=end_date)
 
+
     return end_date_filter
+
 
 # 统计数据
 def statistics(all_data, stocks):
@@ -81,3 +81,5 @@ def statistics(all_data, stocks):
 
     msg = "涨停数：{}   跌停数：{}\n涨幅大于5%数：{}  跌幅大于5%数：{}".format(limitup, limitdown, up5, down5)
     push.statistics(msg)
+
+

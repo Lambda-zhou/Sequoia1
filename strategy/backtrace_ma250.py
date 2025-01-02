@@ -73,8 +73,9 @@ def check(code_name, data, end_date=None, threshold=60):
         end_date = datetime.now().date()
 
     # date_diff = recent_lowest_row['日期'] - end_date
-    date_diff = datetime.date(datetime.strptime(recent_lowest_row['日期'], '%Y-%m-%d')) - \
-                datetime.date(datetime.strptime(highest_row['日期'], '%Y-%m-%d'))
+    # date_diff = datetime.date(datetime.strptime(recent_lowest_row['日期'], '%Y-%m-%d')) - \
+    #             datetime.date(datetime.strptime(highest_row['日期'], '%Y-%m-%d'))
+    date_diff = recent_lowest_row['日期'] - highest_row['日期']
 
     if not(timedelta(days=10) <= date_diff <= timedelta(days=50)):
         return False

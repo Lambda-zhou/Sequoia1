@@ -3,25 +3,21 @@ import pandas as pd
 
 # 股票监测策略函数
 def check(code_name, data, end_date=None, threshold=60):
-    if end_date is not None:
-        mask = (data['日期'] <= end_date)
-        data = data.loc[mask]
-    data = data.tail(n=threshold)
-
     # 确保数据行数足够
     if len(data) < threshold + 1:
         logging.debug("{0}: 数据样本小于{1}天...\n".format(code_name, threshold + 1))
         return False
+
+    if end_date is not None:
+        mask = (data['日期'] <= end_date)
+        data = data.loc[mask]
+    data = data.tail(n=threshold)
 
     # 获取当前交易日数据
     current_day = data.iloc[-1]
     prev_day = data.iloc[-2]
     day_before_two = data.iloc[-3]
     day_before_three = data.iloc[-4]
-    if(current_day and prev_day and day_before_two and day_before_three):
-        logging.info("数据完整")
-    else:
-        logging.info("数据残缺")
 
     # 条件1：当前收盘价相对于3个交易日前和4个交易日前的收盘价比值大于等于1.1，并且当前收盘价等于当前最高价
     ratio_3_days = current_day['收盘'] / day_before_three['收盘']

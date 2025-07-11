@@ -1,3 +1,8 @@
+# 已实现项目复现
+## 具体内容如下
+环境：python 3.9, jupyter notebook
+代码已经上传到本项目的Sequoia1.ipynb
+
 ## Sequoia选股系统
 ### 简介
 本程序使用[AKShare接口](https://github.com/akfamily/akshare)，从东方财富获取数据。

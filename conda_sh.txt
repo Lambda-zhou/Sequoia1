@@ -1,0 +1,9 @@
+%%bash 
+# 1. 验证安装 (应显示 Linux 可执行文件，若无环境请自行下载)
+ls -l $INSTALL_DIR/bin/conda
+# 2. 创建虚拟环境
+$HOME/miniconda/bin/conda create -n Sq python=3.11 -y
+# 3. 初始化虚拟环境
+source $HOME/miniconda/etc/profile.d/conda.sh
+# 4. 激活虚拟环境
+conda activate Sq

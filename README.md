@@ -1,7 +1,7 @@
 # 已实现项目复现
 ## 具体内容如下
-环境：python 3.9, jupyter notebook
-代码已经上传到本项目的Sequoia1.ipynb
+环境：python 3.9, jupyter notebook，linux操作系统
+代码已经上传到本项目的ipynb文件和txt文件，txt中是bash命令（可直接复制到notebook中的代码块中运行）
 
 ## Sequoia选股系统
 ### 简介
